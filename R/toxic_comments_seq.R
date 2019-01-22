@@ -1,12 +1,21 @@
+## Multi-label classification using data from Kaggle Competition:
+## id 8076
+## url https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge
+
 ## load libraries
 library(here)
-library(tidyverse)
+library(dplyr)
+library(readr)
 library(keras)
 
+## define paramaters
 vocab_size = 10000
 max_len = 200
 
-## load data
+## TODO ## ---------------------------------------------------------------------
+## Add part to download data and put in /data/toxic_comments/
+
+## load data -------------------------------------------------------------------
 train_data <- read_csv(paste0(here::here(), "/data/toxic_comments/train.csv"))
 test_data <- read_csv(paste0(here::here(), "/data/toxic_comments/test.csv"))
 
@@ -44,12 +53,10 @@ model %>% compile(
 )
 
 ## fit
-history <- model %>% fit(
-  x_train,
+history <- model %>% 
+  fit( x_train,
   y_train,
   epochs = 16,
   batch_size = 32,
   validation_split = 0.2,
-  verbose=1
-  # ,callbacks = c(early_stopping)
-)
+  verbose = 1)
