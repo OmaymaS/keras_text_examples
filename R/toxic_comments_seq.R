@@ -40,9 +40,9 @@ y_train <- train_data %>%
 ## define model
 model <- keras_model_sequential()
 model %>% 
-  layer_embedding(input_dim = vocab_size, output_dim = 16) %>%
+  layer_embedding(input_dim = vocab_size, output_dim = 64) %>%
   layer_global_average_pooling_1d() %>%
-  layer_dense(units = 16, activation = "relu") %>%
+  layer_dense(units = 32, activation = "relu") %>%
   layer_dense(units = 6, activation = "sigmoid")
 
 ## specify model optimizer, loss and metrics
@@ -54,9 +54,17 @@ model %>% compile(
 
 ## fit
 history <- model %>% 
-  fit( x_train,
+  fit(x_train,
   y_train,
   epochs = 16,
-  batch_size = 32,
-  validation_split = 0.2,
+  batch_size = 64,
+  validation_split = 0.05,
   verbose = 1)
+
+## predict on test data --------------------------------------------------------
+predicted_prob <- predict_proba(model, x_test)
+
+## join ids and predictions -------------------------------------------
+res <- as_data_frame(predicted_prob)
+names(res) <- names(train_data)[3:8] ## labels names
+res <- add_column(res, id = test_data$id, .before = 1) ## add id column
