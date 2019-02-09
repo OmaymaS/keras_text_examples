@@ -54,12 +54,11 @@ model %>% compile(
 
 ## fit
 history <- model %>% 
-  fit(x_train,
-  y_train,
-  epochs = 16,
-  batch_size = 64,
-  validation_split = 0.05,
-  verbose = 1)
+  fit(x_train, y_train,
+      epochs = 16,
+      batch_size = 64,
+      validation_split = 0.05,
+      verbose = 1)
 
 ## predict on test data --------------------------------------------------------
 predicted_prob <- predict_proba(model, x_test)
@@ -67,4 +66,4 @@ predicted_prob <- predict_proba(model, x_test)
 ## join ids and predictions -------------------------------------------
 res <- as_data_frame(predicted_prob)
 names(res) <- names(train_data)[3:8] ## labels names
-res <- add_column(res, id = test_data$id, .before = 1) ## add id column
+res <- tibble::add_column(res, id = test_data$id, .before = 1) ## add id column
